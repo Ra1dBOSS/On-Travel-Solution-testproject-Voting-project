@@ -27,26 +27,23 @@ public class StatisticDTO {
             votes[i] = pollDTO.getAnswers()[i].getStatistic();
             if (pollDTO.getAnswers()[i].getStatistic() > max) {
                 max = pollDTO.getAnswers()[i].getStatistic();
-                maxI = i;
+                maxI = pollDTO.getAnswers()[i].getId();
                 leader = pollDTO.getAnswers()[i].getText();
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Number of voters is ").append(votes).append("\n");
-        stringBuilder.append("Leader is answer number ").append(maxI).append(" :").append(leader).append("\n")
-                .append("With ").append(max);
+        String ret ="Number of all voted is " + allVoted + "\nLeader is answer with id " + maxI + ": " + leader + "\n" +  "With " + max;
         if (allVoted > 0) {
-            stringBuilder.append("(").append(max / allVoted).append(")");
+            ret += "(" + max / allVoted + ")";
         }
-        stringBuilder.append(" number of votes").append("\n\n\n");
+        ret += " number of votes\n\n";
         for (int i = 0; i<pollDTO.getAnswers().length; i++) {
-            stringBuilder.append(pollDTO.getAnswers()[i].getStatistic());
+            ret += pollDTO.getAnswers()[i].getStatistic();
             if (allVoted > 0) {
-                stringBuilder.append("(").append(pollDTO.getAnswers()[i].getStatistic() / allVoted).append(")");
+                ret += "(" + pollDTO.getAnswers()[i].getStatistic() / allVoted + ")";
             }
-            stringBuilder.append(" votes for number ").append(i).append(" :").append(pollDTO.getAnswers()[i].getText()).append("\n");
+            ret += " votes for number " + i + " :" + pollDTO.getAnswers()[i].getText() + "\n";
         }
-        return stringBuilder.toString();
+        return ret;
     }
 
 }
