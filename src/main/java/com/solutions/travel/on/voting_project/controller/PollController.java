@@ -1,6 +1,9 @@
 package com.solutions.travel.on.voting_project.controller;
 
 import com.solutions.travel.on.voting_project.dto.PollDTO;
+import com.solutions.travel.on.voting_project.model.Poll;
+import com.solutions.travel.on.voting_project.service.PollService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,12 +11,35 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/poll")
 public class PollController {
 
-
+    @Autowired
+    private PollService pollService;
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public PollDTO createPoll(@RequestBody PollDTO pollDTO) {
-        return null;
+        Poll poll = pollService.createPoll(pollDTO.toPoll());
+        return new PollDTO(poll);
     }
 
+    @GetMapping("/read/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PollDTO readPoll(@PathVariable int id) {
+        Poll poll = pollService.readPoll(id);
+        return new PollDTO(poll);
+    }
+
+    @PutMapping("/update/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PollDTO updatePoll(@PathVariable int id, @RequestBody PollDTO pollDTO) {
+        Poll poll = pollDTO.toPoll();
+        poll.setId(id);
+        pollService.updatePoll(poll);
+        return new PollDTO(poll);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePoll(@PathVariable int id) {
+        pollService.deletePoll(id);
+    }
 }

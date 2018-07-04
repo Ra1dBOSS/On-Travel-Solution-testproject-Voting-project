@@ -17,10 +17,7 @@ public class PollDTO {
 
     private String title;
     private String question;
-
-    @JsonIgnore
     private Status status;
-
     private Answer[] answers;
 
     public PollDTO() {
@@ -77,52 +74,34 @@ public class PollDTO {
         this.answers = answers;
     }
 
-    @JsonProperty("hrefs")
-    public Href[] getHrefs() {
-        List<Href> hrefs = new ArrayList<>();
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public HrefDTO[] getHrefs() {
+        List<HrefDTO> hrefs = new ArrayList<>();
         if (status == Status.CREATED) {
-            hrefs.add(new Href("start this poll", "/poll/start/" + id));
+            hrefs.add(new HrefDTO("start this poll", "/poll/start/" + id));
         }
         if (status == Status.STARTED) {
-            hrefs.add(new Href("finish this poll", "/poll/finish/" + id));
+            hrefs.add(new HrefDTO("finish this poll", "/poll/finish/" + id));
             for (int i = 0; i<answers.length; i++) {
-                hrefs.add(new Href("vote for answer number " + i + " :" + answers[i].getText()
+                hrefs.add(new HrefDTO("vote for answer number " + i + " :" + answers[i].getText()
                         , "/poll/vote/" + id + "/" + answers[i].getId()));
             }
         }
         if (status == Status.FINISHED) {
-            hrefs.add(new Href("check out statistic", "/poll/stat/" + id));
+            hrefs.add(new HrefDTO("check out statistic", "/poll/stat/" + id));
         }
-        return (Href[]) hrefs.toArray();
-    }
-
-    class Href {
-        private String name;
-        private String href;
-
-        public Href() {
-
-        }
-
-        public Href(String name, String href) {
-            this.name = name;
-            this.href = href;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
+        hrefs.add(new HrefDTO("create new poll", "/poll/create/"));
+        hrefs.add(new HrefDTO("get this poll", "/poll/read/" + id));
+        hrefs.add(new HrefDTO("update this poll", "/poll/update/" + id));
+        hrefs.add(new HrefDTO("delete this poll", "/poll/delete/" + id));
+        return (HrefDTO[]) hrefs.toArray();
     }
 }

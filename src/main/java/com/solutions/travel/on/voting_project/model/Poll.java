@@ -29,7 +29,7 @@ public class Poll {
     private List<Answer> answers;
 
     public Poll() {
-
+        this.status = Status.CREATED;
     }
 
     public Poll(String title, String question, List<Answer> answers) {
