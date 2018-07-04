@@ -30,6 +30,12 @@ public class Answer {
         this.poll = poll;
     }
 
+    public Answer(String text, Poll poll) {
+        this.text = text;
+        this.statistic = 0;
+        this.poll = poll;
+    }
+
     public int getId() {
         return id;
     }
