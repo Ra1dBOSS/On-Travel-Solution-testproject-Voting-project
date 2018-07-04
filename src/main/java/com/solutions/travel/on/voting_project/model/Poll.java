@@ -1,7 +1,10 @@
 package com.solutions.travel.on.voting_project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "polls")
@@ -18,6 +21,10 @@ public class Poll {
     @Column(name = "question")
     private String question;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
     @OneToMany(mappedBy = "poll", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Answer> answers;
 
@@ -28,6 +35,7 @@ public class Poll {
     public Poll(String title, String question, List<Answer> answers) {
         this.title = title;
         this.question = question;
+        this.status = Status.CREATED;
         this.answers = answers;
     }
 
@@ -61,6 +69,28 @@ public class Poll {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Poll)) return false;
+        Poll poll = (Poll) o;
+        return getId() == poll.getId();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
     }
 }
 
