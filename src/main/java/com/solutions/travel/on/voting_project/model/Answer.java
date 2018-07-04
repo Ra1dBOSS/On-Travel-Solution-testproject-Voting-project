@@ -11,7 +11,6 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     private int id;
 
     @Column(name = "text")

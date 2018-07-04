@@ -59,4 +59,19 @@ public class PollServiceImpl implements PollService {
         }
         return poll;
     }
+
+    @Override
+    public Poll vote(int pollId, int answerId) {
+        Poll poll = pollDAO.getPollById(pollId);
+        if ((poll != null) && (poll.getStatus().equals(Status.STARTED))) {
+            for (Answer x : poll.getAnswers()) {
+                if (x.getId() == answerId) {
+                    x.setStatistic(x.getStatistic() + 1);
+                    break;
+                }
+            }
+            pollDAO.addPoll(poll);
+        }
+        return poll;
+    }
 }

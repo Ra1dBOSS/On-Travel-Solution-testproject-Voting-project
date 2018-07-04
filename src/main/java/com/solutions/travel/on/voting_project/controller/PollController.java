@@ -1,6 +1,7 @@
 package com.solutions.travel.on.voting_project.controller;
 
 import com.solutions.travel.on.voting_project.dto.PollDTO;
+import com.solutions.travel.on.voting_project.dto.StatisticDTO;
 import com.solutions.travel.on.voting_project.model.Poll;
 import com.solutions.travel.on.voting_project.model.Status;
 import com.solutions.travel.on.voting_project.service.PollService;
@@ -54,7 +55,6 @@ public class PollController {
     }
 
     @PutMapping("/start/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PollDTO> startPoll(@PathVariable int id) {
         Poll poll = pollService.startPoll(id);
         if (poll == null) {
@@ -77,13 +77,24 @@ public class PollController {
 
     @PostMapping("/vote/{pollId}/{answerId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PollDTO> finishPoll(@PathVariable int pollId, @PathVariable int answerId) {
+    public ResponseEntity<PollDTO> votePoll(@PathVariable int pollId, @PathVariable int answerId) {
         Poll poll = pollService.vote(pollId, answerId);
         if (poll == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         PollDTO pollDTO = new PollDTO(poll);
         return ResponseEntity.status(HttpStatus.OK).body(pollDTO);
+    }
+
+    @GetMapping("/stat/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<StatisticDTO> statPoll(@PathVariable int id) {
+        Poll poll = pollService.readPoll(id);
+        if (poll == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        StatisticDTO statisticDTO = new StatisticDTO(poll);
+        return ResponseEntity.status(HttpStatus.OK).body(statisticDTO);
     }
 
 }

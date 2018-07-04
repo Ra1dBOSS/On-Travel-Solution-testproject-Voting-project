@@ -16,5 +16,6 @@ public interface PollService {
 
     Poll finishPoll(int id);
 
+    Poll vote(int pollId, int answerId);
 
 }

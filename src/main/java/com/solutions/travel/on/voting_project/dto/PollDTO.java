@@ -96,9 +96,10 @@ public class PollDTO {
         if (status == Status.STARTED) {
             hrefs.add(new Href("finish this poll", "/poll/finish/" + id));
             for (int i = 0; i<answers.length; i++) {
-                hrefs.add(new Href("vote for answer number " + i + " :" + answers[i].getText()
+                hrefs.add(new Href("vote for answer with id = " + i + " :" + answers[i].getText()
                         , "/poll/vote/" + id + "/" + answers[i].getId()));
             }
+            hrefs.add(new Href("check out statistic", "/poll/stat/" + id));
         }
         if (status == Status.FINISHED) {
             hrefs.add(new Href("check out statistic", "/poll/stat/" + id));
@@ -114,36 +115,5 @@ public class PollDTO {
             i++;
         }
         return hrefDTOs;
-    }
-
-    class Href {
-
-        private String name;
-        private String href;
-
-        public Href() {
-
-        }
-
-        public Href(String name, String href) {
-            this.name = name;
-            this.href = href;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
     }
 }
