@@ -29,7 +29,12 @@ public class PollDTO {
         this.title = poll.getTitle();
         this.question = poll.getQuestion();
         this.status = poll.getStatus();
-        this.answers = (Answer[]) poll.getAnswers().toArray();
+        this.answers = new Answer[poll.getAnswers().size()];
+        int i = 0;
+        for (Answer x : poll.getAnswers()) {
+            this.answers[i] = x;
+            i++;
+        }
     }
 
     @JsonIgnore
@@ -83,25 +88,62 @@ public class PollDTO {
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public HrefDTO[] getHrefs() {
-        List<HrefDTO> hrefs = new ArrayList<>();
+    public Href[] getHrefs() {
+        List<Href> hrefs = new ArrayList<>();
         if (status == Status.CREATED) {
-            hrefs.add(new HrefDTO("start this poll", "/poll/start/" + id));
+            hrefs.add(new Href("start this poll", "/poll/start/" + id));
         }
         if (status == Status.STARTED) {
-            hrefs.add(new HrefDTO("finish this poll", "/poll/finish/" + id));
+            hrefs.add(new Href("finish this poll", "/poll/finish/" + id));
             for (int i = 0; i<answers.length; i++) {
-                hrefs.add(new HrefDTO("vote for answer number " + i + " :" + answers[i].getText()
+                hrefs.add(new Href("vote for answer number " + i + " :" + answers[i].getText()
                         , "/poll/vote/" + id + "/" + answers[i].getId()));
             }
         }
         if (status == Status.FINISHED) {
-            hrefs.add(new HrefDTO("check out statistic", "/poll/stat/" + id));
+            hrefs.add(new Href("check out statistic", "/poll/stat/" + id));
         }
-        hrefs.add(new HrefDTO("create new poll", "/poll/create/"));
-        hrefs.add(new HrefDTO("get this poll", "/poll/read/" + id));
-        hrefs.add(new HrefDTO("update this poll", "/poll/update/" + id));
-        hrefs.add(new HrefDTO("delete this poll", "/poll/delete/" + id));
-        return (HrefDTO[]) hrefs.toArray();
+        hrefs.add(new Href("create new poll", "/poll/create/"));
+        hrefs.add(new Href("get this poll", "/poll/read/" + id));
+        hrefs.add(new Href("update this poll", "/poll/update/" + id));
+        hrefs.add(new Href("delete this poll", "/poll/delete/" + id));
+        Href[] hrefDTOs = new Href[hrefs.size()];
+        int i = 0;
+        for (Href x : hrefs) {
+            hrefDTOs[i] = x;
+            i++;
+        }
+        return hrefDTOs;
+    }
+
+    class Href {
+
+        private String name;
+        private String href;
+
+        public Href() {
+
+        }
+
+        public Href(String name, String href) {
+            this.name = name;
+            this.href = href;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getHref() {
+            return href;
+        }
+
+        public void setHref(String href) {
+            this.href = href;
+        }
     }
 }

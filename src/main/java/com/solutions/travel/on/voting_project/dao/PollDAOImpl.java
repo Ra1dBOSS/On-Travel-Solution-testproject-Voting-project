@@ -41,12 +41,13 @@ public class PollDAOImpl implements PollDAO {
         poll1.setAnswers(poll.getAnswers());
         for (Answer x : poll1.getAnswers()) {
             x.setId(0);
+            x.setPoll(poll1);
         }
         entityManager.flush();
     }
 
     @Override
-    public void deletePoll(int id) {
+    public void deletePoll(int id) throws IllegalArgumentException {
         entityManager.remove(getPollById(id));
     }
 }

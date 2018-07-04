@@ -36,7 +36,7 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public void deletePoll(int id) {
+    public void deletePoll(int id) throws IllegalArgumentException {
         pollDAO.deletePoll(id);
     }
 

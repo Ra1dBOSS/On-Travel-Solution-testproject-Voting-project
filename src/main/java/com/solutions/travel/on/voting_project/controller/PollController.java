@@ -5,6 +5,7 @@ import com.solutions.travel.on.voting_project.model.Poll;
 import com.solutions.travel.on.voting_project.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,9 +24,13 @@ public class PollController {
 
     @GetMapping("/read/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PollDTO readPoll(@PathVariable int id) {
+    public ResponseEntity<PollDTO> readPoll(@PathVariable int id) {
         Poll poll = pollService.readPoll(id);
-        return new PollDTO(poll);
+        if (poll == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        PollDTO pollDTO = new PollDTO(poll);
+        return ResponseEntity.status(HttpStatus.OK).body(pollDTO);
     }
 
     @PutMapping("/update/{id}")
@@ -38,8 +43,14 @@ public class PollController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePoll(@PathVariable int id) {
-        pollService.deletePoll(id);
+    public ResponseEntity deletePoll(@PathVariable int id) {
+        try {
+            pollService.deletePoll(id);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
+
 }
