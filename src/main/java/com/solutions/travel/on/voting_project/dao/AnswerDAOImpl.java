@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 @Repository
+@Transactional
 public class AnswerDAOImpl implements AnswerDAO {
 
     @PersistenceContext
@@ -20,5 +22,6 @@ public class AnswerDAOImpl implements AnswerDAO {
     @Override
     public void deleteAnswer(int id) {
         entityManager.remove(getAnswerById(id));
+        entityManager.getTransaction().commit();
     }
 }

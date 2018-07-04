@@ -43,9 +43,9 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll startPoll(int id) {
         Poll poll = pollDAO.getPollById(id);
-        if (poll.getStatus() == Status.CREATED) {
+        if ((poll != null) && (poll.getStatus() == Status.CREATED)) {
             poll.setStatus(Status.STARTED);
-            pollDAO.updatePoll(poll);
+            pollDAO.addPoll(poll);
         }
         return poll;
     }
@@ -53,9 +53,9 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll finishPoll(int id) {
         Poll poll = pollDAO.getPollById(id);
-        if (poll.getStatus() == Status.STARTED) {
+        if ((poll != null) && (poll.getStatus() == Status.STARTED)) {
             poll.setStatus(Status.FINISHED);
-            pollDAO.updatePoll(poll);
+            pollDAO.addPoll(poll);
         }
         return poll;
     }

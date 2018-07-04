@@ -32,16 +32,17 @@ public class PollDAOImpl implements PollDAO {
 
     @Override
     public void updatePoll(Poll poll) {
-        Poll poll1 = getPollById(poll.getId());
-        poll1.setTitle(poll.getTitle());
-        poll1.setQuestion(poll.getQuestion());
-        for (Answer x : poll1.getAnswers()) {
+        Poll _poll = getPollById(poll.getId());
+        _poll.setTitle(poll.getTitle());
+        _poll.setQuestion(poll.getQuestion());
+        _poll.setStatus(poll.getStatus());
+        for (Answer x : _poll.getAnswers()) {
             answerDAO.deleteAnswer(x.getId());
         }
-        poll1.setAnswers(poll.getAnswers());
-        for (Answer x : poll1.getAnswers()) {
+        _poll.setAnswers(poll.getAnswers());
+        for (Answer x : _poll.getAnswers()) {
             x.setId(0);
-            x.setPoll(poll1);
+            x.setPoll(_poll);
         }
         entityManager.flush();
     }
